@@ -25,20 +25,27 @@ class TvShow {
       name: json['name'],
       webChannel: json['webChannel']?['name'] ?? 'N/A',
       rating: json['rating']?['average']?.toDouble() ?? 0.0,
-      summary: json['summary'] ?? 'Sem resumo disponível.',
+      summary: json['summary'] ?? 'Sem resumo disponível',
     );
   }
 }
 
 class TvShowModel extends ChangeNotifier {
-
   final TvShowService _tvShowService = TvShowService();
 
   final List<TvShow> _tvShows = [];
   List<TvShow> get tvShows => _tvShows;
 
+  Future<TvShow> getTvShowById(int id) async {
+    try {
+      return await _tvShowService.fetchTvShowById(id);
+    } catch (e) {
+      throw Exception('Falha em buscar série: ${e.toString()}');
+    }
+  }
+
   Future<List<TvShow>> searchTvShows(String query) async {
-    try{
+    try {
       return await _tvShowService.fetchTvShows(query);
     } catch (e) {
       throw Exception('Falha em buscar séries: ${e.toString()}');
