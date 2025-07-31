@@ -88,6 +88,20 @@ class TvShowModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void sortTvShowsByName(bool nameDescending){
+    nameDescending 
+    ?  tvShows.sort((a,b) => b.name.compareTo(a.name))
+    : tvShows.sort((a,b) => a.name.compareTo(b.name));
+    notifyListeners();
+  }
+
+  void sortTvShowsByRating(bool ratingDescending){
+    ratingDescending 
+    ? tvShows.sort((a,b) => a.rating.compareTo(b.rating))
+    : tvShows.sort((a,b) => b.rating.compareTo(a.rating));
+    notifyListeners();
+  }
+
   void editTvShow(TvShow oldTvShow, TvShow newTvShow, BuildContext context) {
     final index = tvShows.indexOf(oldTvShow);
     tvShows[index] = newTvShow;
