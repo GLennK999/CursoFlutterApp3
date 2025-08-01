@@ -26,39 +26,23 @@ class _FavTvShowScreenState extends State<FavTvShowScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               FloatingActionButton(
-                onPressed: () {
-                  
-                  
-                  if(nameDescending) {
-                    tvShowModel.sortTvShowsByName(nameDescending);
-                    nameDescending = false;
-                  }else{
-                    tvShowModel.sortTvShowsByName(nameDescending);
-                    nameDescending = true;
-                  }
-                  
-                },
-                child: const Icon(Icons.sort_by_alpha, size: 20),
+                onPressed: () =>
+                    context.read<TvShowModel>().sortTvShowsByName(),
+                child: context.read<TvShowModel>().nameDescending
+                    ? Transform.flip(
+                        flipX: true, // altera o eixo X para fazer o efeito de ZA
+                        child: const Icon(Icons.sort_by_alpha, size: 20),
+                      )
+                    : const Icon(Icons.sort_by_alpha, size: 20),
               ),
               SizedBox(width: 16),
               FloatingActionButton(
-                onPressed: () {
-                  if (ratingDescending) {
-                    tvShowModel.sortTvShowsByRating(ratingDescending);
-                    ratingDescending = false;
-                  } else {
-                    tvShowModel.sortTvShowsByRating(ratingDescending);
-                    ratingDescending = true;
-                  }
-                },
-                child: const Icon(Icons.stars_outlined, size: 20),
+                onPressed: () =>
+                    context.read<TvShowModel>().sortTvShowsByRating(),
+                child: context.read<TvShowModel>().ratingDescending
+                    ? const Icon(Icons.stars_sharp, size: 20)
+                    : const Icon(Icons.stars_outlined, size: 20),
               ),
-              /*
-              Transform.flip(
-                  flipX: true, // Flips along the X-axis (horizontally)
-                  child: const Icon(Icons.sort_by_alpha, size: 20),
-                ),
-                */
             ],
           ),
           Text(

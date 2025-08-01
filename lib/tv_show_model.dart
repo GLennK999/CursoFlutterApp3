@@ -36,6 +36,9 @@ class TvShowModel extends ChangeNotifier {
   final List<TvShow> _tvShows = [];
   List<TvShow> get tvShows => _tvShows;
 
+  bool ratingDescending = true; // Começa ordenando por rating decrescente
+  bool nameDescending = false;  // Começa ordenando por nome crescente
+
   Future<TvShow> getTvShowById(int id) async {
     try {
       return await _tvShowService.fetchTvShowById(id);
@@ -88,17 +91,19 @@ class TvShowModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void sortTvShowsByName(bool nameDescending){
-    nameDescending 
-    ?  tvShows.sort((a,b) => b.name.compareTo(a.name))
-    : tvShows.sort((a,b) => a.name.compareTo(b.name));
+  void sortTvShowsByName(){
+    nameDescending = !nameDescending; // Alterna o estado de nameDescending
+    tvShows.sort((a, b) => nameDescending 
+        ? b.name.compareTo(a.name) 
+        : a.name.compareTo(b.name));
     notifyListeners();
   }
 
-  void sortTvShowsByRating(bool ratingDescending){
-    ratingDescending 
-    ? tvShows.sort((a,b) => a.rating.compareTo(b.rating))
-    : tvShows.sort((a,b) => b.rating.compareTo(a.rating));
+  void sortTvShowsByRating(){
+    ratingDescending = !ratingDescending; // Alterna o estado de ratingDescending
+    tvShows.sort((a, b) => ratingDescending 
+        ? b.rating.compareTo(a.rating) 
+        : a.rating.compareTo(b.rating));
     notifyListeners();
   }
 
