@@ -14,11 +14,12 @@ class TvShowScreen extends StatefulWidget {
 }
 
 class _TvShowScreenState extends State<TvShowScreen> {
-  late Future<TvShow> tvShow = context.read<TvShowModel>().getTvShowById( widget.id);
+  late Future<TvShow> tvShow = context.read<TvShowModel>().getTvShowById(
+    widget.id,
+  );
 
   @override
   Widget build(BuildContext context) {
-
     final tvShowModel = context.watch<TvShowModel>();
 
     return FutureBuilder(
@@ -100,7 +101,9 @@ class _TvShowScreenState extends State<TvShowScreen> {
                   ),
                   SizedBox(height: 16),
                   //Text(tvShow.summary, style: TextStyle(fontSize: 16)),
-                  Html(data: tvShow.summary), //permite o tratamento de tags HTML no texto
+                  Html(
+                    data: tvShow.summary,
+                  ), //permite o tratamento de tags HTML no texto
                   SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -110,21 +113,23 @@ class _TvShowScreenState extends State<TvShowScreen> {
                         child: Text('VOLTAR'),
                       ),
                       SizedBox(width: 16),
-                      tvShowModel.tvShows.any((show) => show.id == tvShow.id) ?
-                      ElevatedButton(
-                        onPressed: () {
-                          tvShowModel.removeTvShow(tvShow, context);
-                          context.go('/');
+                      FutureBuilder<bool>(
+                        future: tvShowModel.isFavorite(tvShow),
+                        builder: (context, snapshot) {
+                          final isFavorite = snapshot.data ?? false;
+                          return ElevatedButton(
+                            onPressed: () {
+                              isFavorite
+                                  ? tvShowModel.removeFromFavorites(tvShow)
+                                  : tvShowModel.addToFavorites(tvShow);
+                            },
+                            child: Text(
+                              isFavorite ? 'DESFAVORITAR' : 'FAVORITAR',
+                            ),
+                          );
                         },
-                        child: Text('DESFAVORITAR'),
-                      )
-                      : ElevatedButton(
-                        onPressed: () {
-                          tvShowModel.addTvShow(tvShow, context);
-                          context.go('/');
-                        },
-                        child: Text('FAVORITAR'),
                       ),
+                      SizedBox(width: 32),
                     ],
                   ),
                 ],
